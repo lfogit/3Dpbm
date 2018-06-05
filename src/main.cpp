@@ -102,6 +102,8 @@ void setup() {
 
     myDHTSensor.begin();
 
+    // Gestion NTP...
+
     Blynk.begin(auth, ssid, pass);
     // You can also specify server:
     //Blynk.begin(auth, ssid, pass, "blynk-cloud.com", 8442);
