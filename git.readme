@@ -1,1 +1,54 @@
 Liste des commandes Git
+
+# Version de Git
+git --version
+
+# Paramétrage initial de Git
+git config --global user.email "lionel@fortier.fr"
+git config --global user.name "Lionel Fortier"
+
+# Créer le répertoire local du projet
+# Se rendre dans le répertoire local cd /path
+
+# Initialiser le projet en tant que dépôt Git local
+git init
+
+# Statut du dépôt Git
+git status
+
+# Ajouter d'un fichier dans le dépôt de Git (par défaut, aucun fichier n'est suivi dans Git)
+git add file
+
+# Enregistrer les modifications du dépôt Git
+git commit -m "commit message..."
+
+# Journal de git
+git log
+
+# Création d'une "branch"
+git branch BranchName
+
+# Lister les branches du dépôt Git
+git branch
+
+# Changer de "branch"
+git checkout BranchName
+
+# Fusion des branchs
+git checkout master      (retour sur branche master (initiale))
+git merge BranchName
+
+# Suppression d'une "branch" annexe
+git branch -d BranchName
+
+# Mapper le dépôt local Git avec un dépôt Remote (type GitHub)
+git remote add origin https://github.com/user/repo.git
+
+# Vérifier un dépôt remote
+git remote -v
+
+# Envoyer un dépôt local sur le dépôt remote
+git push origin master
+
+# Récupérer un dépôt distant Git
+git pull origin master
