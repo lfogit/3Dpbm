@@ -49,14 +49,18 @@ char pass[] = "vesperboncamiitrobarasbonafi";
 
 BlynkTimer timer_DHT;
 
+String floatToString(float x, byte precision = 1)
+{
+  char tmp[50];
+  dtostrf(x, 0, precision, tmp);
+  return String(tmp);
+}
+
 void DHTSensor()
 {
 
     float fHum = myDHTSensor.readHumidity();
     float fTemp = myDHTSensor.readTemperature();
-
-    //Arrondi des valeurs flottantes
-    
 
     // Check if any reads failed and exit early (to try again).
     if (isnan(fHum) || isnan(fTemp)) {
@@ -72,12 +76,11 @@ void DHTSensor()
     Serial.println(" *C ");
 
     //Show values on LCD Display
+    String sTemp = floatToString(fTemp); // Round Temp
+    String sHum = floatToString(fHum); // Round Hum
 
-    String sTemp;
-    String sHum;
-    sTemp = String(fTemp);
-    sHum = String(fHum);
-
+    lcd.setCursor(0,1);
+    lcd.print("                ");
     lcd.setCursor(0,1);
     lcd.print("T="+sTemp+"C"+" H="+sHum+"%");
 
@@ -111,7 +114,7 @@ void setup() {
     lcd.clear();
 
     lcd.setCursor(0,0);
-    lcd.print("   3D P.M.Box   ");
+    lcd.print("3Dpbm HH:MM OFF!");
 
     // go to row 1 column 0, note that this is indexed at 0
     lcd.setCursor(0,1);
