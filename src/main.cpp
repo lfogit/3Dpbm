@@ -55,6 +55,9 @@ void DHTSensor()
     float fHum = myDHTSensor.readHumidity();
     float fTemp = myDHTSensor.readTemperature();
 
+    //Arrondi des valeurs flottantes
+    
+
     // Check if any reads failed and exit early (to try again).
     if (isnan(fHum) || isnan(fTemp)) {
         Serial.println("> DHTSensor() : ERROR");
