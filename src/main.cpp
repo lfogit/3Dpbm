@@ -30,6 +30,7 @@
 #include <BlynkSimpleEsp32.h> // Blynk Library for ESP32
 #include <DHT.h> // DHT Sensors Library
 #include <LiquidCrystal.h>
+#include <NtpClientLib.h>
 
 /* Comment this out to disable prints and save space */
 #define BLYNK_PRINT Serial
