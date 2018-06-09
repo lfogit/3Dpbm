@@ -34,6 +34,8 @@
 #include <LiquidCrystal.h> // LCD 1602 Display Library
 #include <Adafruit_Sensor.h> // For BMP280 Sensor
 #include <Adafruit_BMP280.h> // For BMP280 Sensor
+#include <TimeLib.h>
+#include <NtpClientLib.h>
 
 /* Comment this out to disable BLYNK prints and save space */
 #define BLYNK_PRINT Serial
