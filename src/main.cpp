@@ -29,16 +29,30 @@
 #include <WiFiClient.h>
 #include <BlynkSimpleEsp32.h> // Blynk Library for ESP32
 #include <DHT.h> // DHT Sensors Library
-#include <LiquidCrystal.h>
+#include <LiquidCrystal.h> // LCD 1602 Display Library
+#include <Adafruit_Sensor.h> // For BMP280 Sensor
+#include <Adafruit_BMP280.h> // For BMP280 Sensor
 
-/* Comment this out to disable prints and save space */
+/* Comment this out to disable BLYNK prints and save space */
 #define BLYNK_PRINT Serial
 
+// Relay PIN
+#define RELAYPIN 27
+// DHT22 Sensor
 #define DHTPIN 26
 #define DHTTYPE DHT22
-
 DHT myDHTSensor(DHTPIN, DHTTYPE);
-LiquidCrystal lcd(22,23,5,18,19,21);
+
+// LCD 1602A Crystal
+LiquidCrystal lcd(17,23,5,18,19,16);
+
+// BMP280 Sensor
+#define I2C_SCL 22
+#define I2C_SDA 21
+#define BME280_ADDRESS 0x76  //If the sensor does not work, try the 0x77 address as well
+Adafruit_BMP280 bmp; // Interface I2C
+//Adafruit_BMP280 bme(BMP_CS); // Interface SPI
+//Adafruit_BMP280 bme(BMP_CS, BMP_MOSI, BMP_MISO,  BMP_SCK);
 
 // Auth Token in the Blynk App.
 char auth[] = "d885d49e9b97457d91bb99c233b305db";
@@ -47,7 +61,7 @@ char auth[] = "d885d49e9b97457d91bb99c233b305db";
 char ssid[] = "CATWIFI_2G_4";
 char pass[] = "vesperboncamiitrobarasbonafi";
 
-BlynkTimer timer_DHT;
+BlynkTimer timer_Sensors;
 
 String floatToString(float x, byte precision = 1)
 {
@@ -56,29 +70,53 @@ String floatToString(float x, byte precision = 1)
   return String(tmp);
 }
 
-void DHTSensor()
+void ReadSensors()
 {
 
+    // BMP Sensor
+    float fPressure = bmp.readPressure();
+    if (isnan(fPressure)) {
+        Serial.println("Reading... BMP 280 Sensor [ERROR]");
+        return;
+    }
+    Serial.println("Reading... BMP 280 Sensor [OK]");
+
+    Serial.print("Pressure = ");
+    Serial.print(fPressure / 100);
+    Serial.println(" hPa");
+
+    Serial.print("Approx. altitude = ");
+    Serial.print(bmp.readAltitude(1013.25)); // this should be adjusted to your local forcase
+    Serial.println(" m");
+
+    Serial.println();
+    // End BMP
+
+    // DHT22
     float fHum = myDHTSensor.readHumidity();
     float fTemp = myDHTSensor.readTemperature();
 
     // Check if any reads failed and exit early (to try again).
     if (isnan(fHum) || isnan(fTemp)) {
-        Serial.println("> DHTSensor() : ERROR");
+        Serial.println("Reading... DHTSensor [ERROR]");
         return;
     }
-    Serial.println("> DHTSensor() : OK");
+    Serial.println("Reading... DHTSensor [OK]");
     Serial.print("Humidity: ");
     Serial.print(fHum);
     Serial.print(" %\t");
     Serial.print("Temperature: ");
     Serial.print(fTemp);
-    Serial.println(" *C ");
+    Serial.println(" °C");
+
+    // End DHT22
 
     //Show values on LCD Display
     String sTemp = floatToString(fTemp); // Round Temp
     String sHum = floatToString(fHum); // Round Hum
-
+    String sPressure = floatToString(fPressure / 100 , 0);
+    lcd.setCursor(0,0);
+    lcd.print(sPressure+"h");
     lcd.setCursor(0,1);
     lcd.print("                ");
     lcd.setCursor(0,1);
@@ -99,8 +137,14 @@ void DHTSensor()
 void setup() {
 
     Serial.begin(115200);
+    Serial.println("Starting...");
 
     myDHTSensor.begin();
+
+    if (!bmp.begin(BME280_ADDRESS)) {
+      Serial.println("Could not find a valid BMP280 sensor, check wiring!");
+      while (1);
+    }
 
     // Gestion NTP...
 
@@ -109,7 +153,7 @@ void setup() {
     //Blynk.begin(auth, ssid, pass, "blynk-cloud.com", 8442);
     //Blynk.begin(auth, ssid, pass, IPAddress(192,168,1,100), 8442);
 
-    timer_DHT.setInterval(5000L, DHTSensor);
+    timer_Sensors.setInterval(5000L, ReadSensors);
 
     // Display init
     lcd.begin(16, 2);
@@ -128,6 +172,6 @@ void setup() {
 void loop() {
 
     Blynk.run();
-    timer_DHT.run();
+    timer_Sensors.run();
 
 }
