@@ -12,12 +12,13 @@
  Circuit:
  * Led and Relay Optocoupler on GPIO 27 (Power On/Off Pronter)
  * DHT22 on GPIO 26
- * BMP280 i2C interface with GPIO 22 as I2C_SCL and GPIO 21 as I2C_SDA
+ * BMP280 sensor on i2C interface with GPIO 22 as I2C_SCL and GPIO 21 as I2C_SDA
  * LCD Display 1602A 2x16 on GPIOs 22,23,5,18,19,21
 
  Release History :
  . 03/06/2018   V1.0    Lionel Fortier  Initial program
  . 05/06/2018   V1.1    Lionel Fortier  Add LCD Display
+ . 09/06/2018   V1.2    Lionel Fortier  Add BMP280 Sensor
 
  Framework : Arduino (C++)
  Platform : ESP32
