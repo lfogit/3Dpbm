@@ -12,6 +12,7 @@
  Circuit:
  * Led and Relay Optocoupler on GPIO 27 (Power On/Off Pronter)
  * DHT22 on GPIO 26
+ * BMP280 i2C interface with GPIO 22 as I2C_SCL and GPIO 21 as I2C_SDA
  * LCD Display 1602A 2x16 on GPIOs 22,23,5,18,19,21
 
  Release History :
